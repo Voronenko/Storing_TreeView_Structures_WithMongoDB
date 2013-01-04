@@ -1,0 +1,24 @@
+use TreeMongo;
+db.categoriesCRO.insert({_id:"Electronics",childs:["Cameras_and_Photography","Shop_Top_Products","Cell_Phones_and_Accessories"]});
+db.categoriesCRO.insert({_id:"Cameras_and_Photography",childs:["Digital_Cameras","Camcorders","Lenses_and_Filters","Tripods_and_supports","Lighting_and_studio"]});
+db.categoriesCRO.insert({_id:"Digital_Cameras",parent:"Cameras_and_Photography", order:10});
+db.categoriesCRO.insert({_id:"Camcorders",childs:[]});
+db.categoriesCRO.insert({_id:"Lenses_and_Filters",childs:[]});
+db.categoriesCRO.insert({_id:"Tripods_and_supports",childs:[]});
+db.categoriesCRO.insert({_id:"Lighting_and_studio",childs:[]});
+db.categoriesCRO.insert({_id:"Shop_Top_Products",childs:["IPad","IPhone","IPod","Blackberry"]});
+db.categoriesCRO.insert({_id:"IPad",childs:[]});
+db.categoriesCRO.insert({_id:"IPhone",childs:[]});
+db.categoriesCRO.insert({_id:"IPod",childs:[]});
+db.categoriesCRO.insert({_id:"Blackberry",childs:[]});
+db.categoriesCRO.insert({_id:"Cell_Phones_and_Accessories",childs:["Cell_Phones_and_Smartphones","Headsets","Batteries","Cables_And_Adapters"]});
+db.categoriesCRO.insert({_id:"Cell_Phones_and_Smartphones",childs:["Nokia","Samsung","Apple","HTC","Ukrtelecom"]});
+db.categoriesCRO.insert({_id:"Headsets",childs:[]});
+db.categoriesCRO.insert({_id:"Batteries",childs:[]});
+db.categoriesCRO.insert({_id:"Cables_And_Adapters",childs:[]});
+db.categoriesCRO.insert({_id:"Nokia",childs:[]});
+db.categoriesCRO.insert({_id:"Samsung",childs:[]});
+db.categoriesCRO.insert({_id:"Apple",childs:[]});
+db.categoriesCRO.insert({_id:"HTC",childs:[]});
+db.categoriesCRO.insert({_id:"UkrTelecom",childs:[]});
+
