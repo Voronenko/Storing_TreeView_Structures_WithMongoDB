@@ -16,7 +16,7 @@ Those approaches are:
 - Model Tree Structures with Nested Sets
 
 Note: article is inspired by another article '[Model Tree Structures in MongoDB](http://docs.mongodb.org/manual/tutorial/model-tree-structures/ "'Model Tree Structures in MongoDB'")' by MongoDB, but does not copy it, but provides 
-additional examples on typical operations with tree management.
+additional examples on typical operations with tree management. Please refer for 10gen article to get more solid understanding of the approach.
 
 As a demo dataset I use some fake eshop goods taxonomy.
 
@@ -119,6 +119,11 @@ path.reverse().join(' / ');
 //Electronics / Cell_Phones_and_Accessories / Cell_Phones_and_Smartphones
 </pre>
 
+## Indexes
+Recommended index is on fields parent and order
+<pre>
+db.categoriesPCO.ensureIndex( { parent: 1, order:1 } )
+</pre>
 
 
 #Tree structure with childs reference
@@ -220,6 +225,12 @@ path.reverse().join(' / ');
 //Electronics / Cell_Phones_and_Accessories / Cell_Phones_and_Smartphones
 </pre>
 
+## Indexes
+Recommended index is putting index on childs:
+<pre>
+db.categoriesCRO.ensureIndex( { childs: 1 } )
+</pre>
+
 #Tree structure Model an Array of Ancestors
 For each node we store (ID, ParentReference, AncestorReferences)
 
@@ -287,16 +298,19 @@ descendants.join(",")
 
 <pre>
 var path=[]
-var item = db.categoriesCRO.findOne({_id:"Nokia"})
-while ((item=db.categoriesCRO.findOne({childs:item._id}))) {
-    path.push(item._id);
-}
-
-path.reverse().join(' / ');
+var item = db.categoriesAAO.findOne({_id:"Nokia"})
+item
+path=item.ancestors;
+path.join(' / ');
 //Electronics / Cell_Phones_and_Accessories / Cell_Phones_and_Smartphones
 </pre>
 
 
+##Indexes
+Recommended index is putting index on ancestors
+<pre>
+  db.categoriesAAO.ensureIndex( { ancestors: 1 } )
+</pre>
 
 
 #Code in action
