@@ -325,4 +325,15 @@ All files are packaged according to the following naming convention:
 - MODELReference_nodedescendants.js - code illustrating how to retrieve all the descendands of the node
 
 
+#Points of interest
+  Please note, that MongoDB does not provide ACID transactions. This means, that for update operations splitted
+into separate update commands, your application should implement additional code to support your code specific transactions.
 
+Formal advise from 10gen is following:
+
+- The Parent Reference pattern provides a simple solution to tree storage, but requires multiple queries to retrieve subtrees	
+- The Child References pattern provides a suitable solution to tree storage as long as no operations on subtrees are necessary. This pattern may also provide a suitable solution for storing graphs where a node may have multiple parents.
+- The Array of Ancestors pattern  - no specific advantages unless you constantly need to get path to the node
+
+
+You are free to mix patterns (by introducing order field, etc) to match the data operations required to your application.
