@@ -16,7 +16,7 @@ while (stack.length>0){
 
 
 descendants.join(",")
-//Cell_Phones_and_Smartphones,Headsets,Batteries,Cables_And_Adapters,Nokia,Samsung,Apple,HTC,UkrTelecom
+//Cell_Phones_and_Smartphones,Headsets,Batteries,Cables_And_Adapters,Nokia,Samsung,Apple,HTC,Vyacheslav
 
 
 

@@ -12,7 +12,7 @@ db.categoriesCRO.insert({_id:"IPhone",childs:[]});
 db.categoriesCRO.insert({_id:"IPod",childs:[]});
 db.categoriesCRO.insert({_id:"Blackberry",childs:[]});
 db.categoriesCRO.insert({_id:"Cell_Phones_and_Accessories",childs:["Cell_Phones_and_Smartphones","Headsets","Batteries","Cables_And_Adapters"]});
-db.categoriesCRO.insert({_id:"Cell_Phones_and_Smartphones",childs:["Nokia","Samsung","Apple","HTC","Ukrtelecom"]});
+db.categoriesCRO.insert({_id:"Cell_Phones_and_Smartphones",childs:["Nokia","Samsung","Apple","HTC","Vyacheslav"]});
 db.categoriesCRO.insert({_id:"Headsets",childs:[]});
 db.categoriesCRO.insert({_id:"Batteries",childs:[]});
 db.categoriesCRO.insert({_id:"Cables_And_Adapters",childs:[]});
@@ -20,5 +20,5 @@ db.categoriesCRO.insert({_id:"Nokia",childs:[]});
 db.categoriesCRO.insert({_id:"Samsung",childs:[]});
 db.categoriesCRO.insert({_id:"Apple",childs:[]});
 db.categoriesCRO.insert({_id:"HTC",childs:[]});
-db.categoriesCRO.insert({_id:"UkrTelecom",childs:[]});
+db.categoriesCRO.insert({_id:"Vyacheslav",childs:[]});
 

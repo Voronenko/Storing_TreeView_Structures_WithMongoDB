@@ -20,5 +20,5 @@ db.categoriesPCO.insert({_id:"Nokia",parent:"Cell_Phones_and_Smartphones", order
 db.categoriesPCO.insert({_id:"Samsung",parent:"Cell_Phones_and_Smartphones", order:20});
 db.categoriesPCO.insert({_id:"Apple",parent:"Cell_Phones_and_Smartphones", order:30});
 db.categoriesPCO.insert({_id:"HTC",parent:"Cell_Phones_and_Smartphones", order:40});
-db.categoriesPCO.insert({_id:"UkrTelecom",parent:"Cell_Phones_and_Smartphones", order:50});
+db.categoriesPCO.insert({_id:"Vyacheslav",parent:"Cell_Phones_and_Smartphones", order:50});
 

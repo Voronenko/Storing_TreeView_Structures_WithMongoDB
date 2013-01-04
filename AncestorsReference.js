@@ -23,5 +23,5 @@ db.categoriesAAO.insert({_id:"Nokia",ancestors:["Electronics","Cell_Phones_and_A
 db.categoriesAAO.insert({_id:"Samsung",ancestors:["Electronics","Cell_Phones_and_Accessories","Cell_Phones_and_Smartphones"],parent:"Cell_Phones_and_Smartphones"});
 db.categoriesAAO.insert({_id:"Apple",ancestors:["Electronics","Cell_Phones_and_Accessories","Cell_Phones_and_Smartphones"],parent:"Cell_Phones_and_Smartphones"});
 db.categoriesAAO.insert({_id:"HTC",ancestors:["Electronics","Cell_Phones_and_Accessories","Cell_Phones_and_Smartphones"],parent:"Cell_Phones_and_Smartphones"});
-db.categoriesAAO.insert({_id:"UkrTelecom",ancestors:["Electronics","Cell_Phones_and_Accessories","Cell_Phones_and_Smartphones"],parent:"Cell_Phones_and_Smartphones"});
+db.categoriesAAO.insert({_id:"Vyacheslav",ancestors:["Electronics","Cell_Phones_and_Accessories","Cell_Phones_and_Smartphones"],parent:"Cell_Phones_and_Smartphones"});
 

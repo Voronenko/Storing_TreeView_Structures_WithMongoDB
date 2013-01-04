@@ -15,7 +15,7 @@ db.categoriesCRO.find({_id:'Electronics'});
 
 db.categoriesCRO.update({_id:'Cell_Phones_and_Smartphones'},{  $addToSet:{childs:'LG'}});
 db.categoriesCRO.update({_id:'Electronics'},{$pull:{childs:'LG'}});
-//{ "_id" : "Cell_Phones_and_Smartphones", "childs" : [ "Nokia", "Samsung", "Apple", "HTC", "Ukrtelecom", "LG" ] }
+//{ "_id" : "Cell_Phones_and_Smartphones", "childs" : [ "Nokia", "Samsung", "Apple", "HTC", "Vyacheslav", "LG" ] }
 db.categoriesCRO.find({_id:'Cell_Phones_and_Smartphones'});
 
 

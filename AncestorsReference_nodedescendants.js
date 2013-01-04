@@ -8,7 +8,7 @@ while(true === ancestors.hasNext()) {
        descendants.push(elem._id);
    }
 descendants.join(",")
-//Cell_Phones_and_Smartphones,Headsets,Batteries,Cables_And_Adapters,Nokia,Samsung,Apple,HTC,UkrTelecom
+//Cell_Phones_and_Smartphones,Headsets,Batteries,Cables_And_Adapters,Nokia,Samsung,Apple,HTC,Vyacheslav
 
 
 var aggrancestors = db.categoriesAAO.aggregate([
@@ -19,4 +19,4 @@ var aggrancestors = db.categoriesAAO.aggregate([
 
 descendants = aggrancestors.result[0].ancestors
 descendants.join(",")
-//UkrTelecom,HTC,Samsung,Cables_And_Adapters,Batteries,Headsets,Apple,Nokia,Cell_Phones_and_Smartphones
+//Vyacheslav,HTC,Samsung,Cables_And_Adapters,Batteries,Headsets,Apple,Nokia,Cell_Phones_and_Smartphones

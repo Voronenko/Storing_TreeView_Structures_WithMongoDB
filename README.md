@@ -29,8 +29,21 @@ As a demo dataset I use some fake eshop goods taxonomy.
 - Get path to node (for example, in order to be build the breadcrumb section)
 - Get all node descendants (in order to be able, for example, to select goods from more general category, like 'Cell Phones and Accessories' which should include goods from all subcategories.
 
+On each of the examples below we:
+
+- Add new node called 'LG' under electronics
+- Move 'LG' node under Cell_Phones_And_Smartphones node
+- Remove 'LG' node from the tree
+- Get child nodes of Electronics node
+- Get path to 'Nokia' node
+- Get all descendants of the 'Cell_Phones_and_Accessories' node
+
+Please refer to image above for visual representation.
+
+
 #Tree structure with parent reference
 This is most commonly used approach. For each node we store (ID, ParentReference, Order).
+![](https://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/ParentReference.jpg)
 ## Operating with tree
 Pretty simple, but changing the position of the node withing siblings will require additional calculations.
 You might want to set high numbers like item position * 10^6 for order in order to be able to set new node order as trunc (lower sibling order - higher sibling order)/2 - this will give you enough operations, until you will need to traverse whole the tree and set the order defaults to big numbers again.
@@ -65,7 +78,7 @@ db.categoriesPCO.find({$query:{parent:'Electronics'}, $orderby:{order:1}})
 //{ "_id" : "Cell_Phones_and_Accessories", "parent" : "Electronics", "order" : 30 }
 </pre>
 
-## Getting all node descendants 
+### Getting all node descendants 
 Unfortunately, also involves recursive operation
 <pre>
 var descendants=[]
@@ -84,7 +97,7 @@ while (stack.length>0){
 
 
 descendants.join(",")
-//Cell_Phones_and_Smartphones,Headsets,Batteries,Cables_And_Adapters,Nokia,Samsung,Apple,HTC,UkrTelecom
+//Cell_Phones_and_Smartphones,Headsets,Batteries,Cables_And_Adapters,Nokia,Samsung,Apple,HTC,Vyacheslav
 
 </pre>
 
@@ -109,7 +122,9 @@ path.reverse().join(' / ');
 
 
 #Tree structure with childs reference
-For each node we store (ID, ChildReferences). Please note, that in this case we do not need order field, because Childs collection
+For each node we store (ID, ChildReferences). 
+
+Please note, that in this case we do not need order field, because Childs collection
 already provides this information. Most of languages respect the array order. If this is not in case for your language, you might consider
 additional coding to preserve order, however this will make things more complicated.
 
@@ -132,7 +147,7 @@ moving the node
 <pre>
 db.categoriesCRO.update({_id:'Cell_Phones_and_Smartphones'},{  $addToSet:{childs:'LG'}});
 db.categoriesCRO.update({_id:'Electronics'},{$pull:{childs:'LG'}});
-//{ "_id" : "Cell_Phones_and_Smartphones", "childs" : [ "Nokia", "Samsung", "Apple", "HTC", "Ukrtelecom", "LG" ] }
+//{ "_id" : "Cell_Phones_and_Smartphones", "childs" : [ "Nokia", "Samsung", "Apple", "HTC", "Vyacheslav", "LG" ] }
 
 </pre>
 
@@ -166,7 +181,7 @@ Result set:
 </pre>
 As you see, we have ordered array childs, which can be used to sort the result set on a client
 
-## Getting all node descendants 
+### Getting all node descendants 
 
 <pre>
 var descendants=[]
@@ -250,7 +265,7 @@ while(true === ancestors.hasNext()) {
        descendants.push(elem._id);
    }
 descendants.join(",")
-//Cell_Phones_and_Smartphones,Headsets,Batteries,Cables_And_Adapters,Nokia,Samsung,Apple,HTC,UkrTelecom
+//Cell_Phones_and_Smartphones,Headsets,Batteries,Cables_And_Adapters,Nokia,Samsung,Apple,HTC,Vyacheslav
 </pre>
 
 second is using aggregation framework introduced in MongoDB 2.2:
@@ -263,7 +278,7 @@ var aggrancestors = db.categoriesAAO.aggregate([
 
 descendants = aggrancestors.result[0].ancestors
 descendants.join(",")
-//UkrTelecom,HTC,Samsung,Cables_And_Adapters,Batteries,Headsets,Apple,Nokia,Cell_Phones_and_Smartphones
+//Vyacheslav,HTC,Samsung,Cables_And_Adapters,Batteries,Headsets,Apple,Nokia,Cell_Phones_and_Smartphones
 </pre>
 
 
@@ -286,4 +301,14 @@ path.reverse().join(' / ');
 
 #Code in action
 
-Code can be downloaded from repository https://github.com/Voronenko/JSOTP
+Code can be downloaded from repository [https://github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB](https://github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB "https://github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB")
+
+All files are packaged according to the following naming convention:
+
+- MODELReference.js - initialization file with tree data for MODEL approach
+- MODELReference_operating.js - add/update/move/remove/get children examples
+- MODELReference_pathtonode.js - code illustrating how to obtain path to node
+- MODELReference_nodedescendants.js - code illustrating how to retrieve all the descendands of the node
+
+
+
