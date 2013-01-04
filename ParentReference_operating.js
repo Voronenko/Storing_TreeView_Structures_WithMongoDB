@@ -3,16 +3,16 @@ use TreeMongo;
 
 var existingelemscount = db.categoriesPCO.find({parent:'Electronics'}).count();
 var neworder = (existingelemscount+1)*10;
-//{ "_id" : "LG", "parent" : "Electronics", "someadditionalattr" : "test", "order" : 40 }
 db.categoriesPCO.insert({_id:'LG', parent:'Electronics', someadditionalattr:'test', order:neworder})
+//{ "_id" : "LG", "parent" : "Electronics", "someadditionalattr" : "test", "order" : 40 }
 db.categoriesPCO.find({_id:'LG'});
 
 //updating/moving node parent
 
 existingelemscount = db.categoriesPCO.find({parent:'Cell_Phones_and_Smartphones'}).count();
 neworder = (existingelemscount+1)*10;
-//{ "_id" : "LG", "order" : 60, "parent" : "Cell_Phones_and_Smartphones", "someadditionalattr" : "test" }
 db.categoriesPCO.update({_id:'LG'},{$set:{parent:'Cell_Phones_and_Smartphones', order:neworder}});
+//{ "_id" : "LG", "order" : 60, "parent" : "Cell_Phones_and_Smartphones", "someadditionalattr" : "test" }
 db.categoriesPCO.find({_id:'LG'});
 
 //removing node

@@ -14,8 +14,9 @@ while (stack.length>0){
     }
 }
 
-//Cell_Phones_and_Smartphones,Headsets,Batteries,Cables_And_Adapters
+
 descendants.join(",")
+//Cell_Phones_and_Smartphones,Headsets,Batteries,Cables_And_Adapters,Nokia,Samsung,Apple,HTC,UkrTelecom
 
 
 
