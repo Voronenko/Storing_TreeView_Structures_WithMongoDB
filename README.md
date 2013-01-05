@@ -368,6 +368,8 @@ Recommended index is putting index on path
 For each node we store (ID, left, right).
 Left field also can be treated as an order field
 
+![](http://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/NestedSets_small.png)
+
 ### Adding new node
 
 <pre>
