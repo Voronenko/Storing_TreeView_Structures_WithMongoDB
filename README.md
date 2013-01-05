@@ -292,24 +292,74 @@ descendants.join(",")
 //Vyacheslav,HTC,Samsung,Cables_And_Adapters,Batteries,Headsets,Apple,Nokia,Cell_Phones_and_Smartphones
 </pre>
 
+#Tree structure using Materialized Path
+For each node we store (ID, PathToNode)
 
-
-### Getting path to node
+### Adding new node
 
 <pre>
+var ancestorpath = db.categoriesMP.findOne({_id:'Electronics'}).path;
+ancestorpath += 'Electronics,'
+db.categoriesMP.insert({_id:'LG', path:ancestorpath});
+//{ "_id" : "LG", "path" : "Electronics," }
+
+</pre>
+
+### Updating/moving the node
+
+moving the node
+<pre>
+ancestorpath = db.categoriesMP.findOne({_id:'Cell_Phones_and_Smartphones'}).path;
+ancestorpath +='Cell_Phones_and_Smartphones,'
+db.categoriesMP.update({_id:'LG'},{$set:{path:ancestorpath}});
+//{ "_id" : "LG", "path" : "Electronics,Cell_Phones_and_Accessories,Cell_Phones_and_Smartphones," }
+</pre>
+
+### Node removal
+<pre>
+db.categoriesMP.remove({_id:'LG'});
+</pre>
+
+### Getting node children, unordered
+Note unless you introduce the order field, it is impossible to get ordered list of node children. You should consider another approach if you need order.
+<pre>
+db.categoriesMP.find({$query:{path:'Electronics,'}})
+//{ "_id" : "Cameras_and_Photography", "path" : "Electronics," }
+//{ "_id" : "Shop_Top_Products", "path" : "Electronics," }
+//{ "_id" : "Cell_Phones_and_Accessories", "path" : "Electronics," }</pre>
+
+
+### Getting all node descendants 
+Single select, regexp starts with ^ which allows using the index for matching
+<pre>
+var descendants=[]
+var item = db.categoriesMP.findOne({_id:"Cell_Phones_and_Accessories"});
+var criteria = '^'+item.path+item._id+',';
+var children = db.categoriesMP.find({path: { $regex: criteria, $options: 'i' }});
+while(true === children.hasNext()) {
+  var child = children.next();
+  descendants.push(child._id);
+}
+
+
+descendants.join(",")
+//Cell_Phones_and_Smartphones,Headsets,Batteries,Cables_And_Adapters,Nokia,Samsung,Apple,HTC,Vyacheslav
+</pre>
+
+### Getting path to node
+We can obtain path directly from node without issuing additional selects.
+<pre>
 var path=[]
-var item = db.categoriesAAO.findOne({_id:"Nokia"})
-item
-path=item.ancestors;
-path.join(' / ');
-//Electronics / Cell_Phones_and_Accessories / Cell_Phones_and_Smartphones
+var item = db.categoriesMP.findOne({_id:"Nokia"})
+print (item.path)
+//Electronics,Cell_Phones_and_Accessories,Cell_Phones_and_Smartphones,
 </pre>
 
 
 ##Indexes
-Recommended index is putting index on ancestors
+Recommended index is putting index on path
 <pre>
-  db.categoriesAAO.ensureIndex( { ancestors: 1 } )
+  db.categoriesAAO.ensureIndex( { path: 1 } )
 </pre>
 
 
