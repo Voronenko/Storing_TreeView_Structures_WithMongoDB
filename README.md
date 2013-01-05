@@ -329,7 +329,8 @@ db.categoriesMP.find({$query:{path:'Electronics,'}})
 //{ "_id" : "Cell_Phones_and_Accessories", "path" : "Electronics," }</pre>
 
 
-### Getting all node descendants 
+### Getting all node descendants
+ 
 Single select, regexp starts with ^ which allows using the index for matching
 <pre>
 var descendants=[]
@@ -361,6 +362,86 @@ Recommended index is putting index on path
 <pre>
   db.categoriesAAO.ensureIndex( { path: 1 } )
 </pre>
+
+
+#Tree structure using Nested Sets
+For each node we store (ID, left, right).
+Left field also can be treated as an order field
+
+### Adding new node
+
+<pre>
+//todo
+</pre>
+
+### Updating/moving the node
+
+moving the node
+<pre>
+//todo
+</pre>
+
+### Node removal
+<pre>
+//todo
+</pre>
+
+### Getting node children, unordered
+Note unless you introduce the order field, it is impossible to get ordered list of node children. You should consider another approach if you need order.
+<pre>
+//todo
+</pre>
+
+
+### Getting all node descendants
+ 
+This is core stength of this approach - all descendants retrieved using one select to DB. Moreover,
+by sorting by node left - the dataset is ready for traversal in a correct order 
+
+<pre>
+var descendants=[]
+var item = db.categoriesNSO.findOne({_id:"Cell_Phones_and_Accessories"});
+print ('('+item.left+','+item.right+')')
+var children = db.categoriesNSO.find({left:{$gt:item.left}, right:{$lt:item.right}}).sort(left:1);
+while(true === children.hasNext()) {
+  var child = children.next();
+  descendants.push(child._id);
+}
+
+
+descendants.join(",")
+//Cell_Phones_and_Smartphones,Headsets,Batteries,Cables_And_Adapters,Nokia,Samsung,Apple,HTC,Vyacheslav
+</pre>
+
+### Getting path to node
+Retrieving path to node is also elegant and can be done using single query to database
+<pre>
+var path=[]
+var item = db.categoriesNSO.findOne({_id:"Nokia"})
+
+var ancestors = db.categoriesNSO.find({left:{$lt:item.left}, right:{$gt:item.right}}).sort({left:1})
+while(true === ancestors.hasNext()) {
+  var child = ancestors.next();
+  path.push(child._id);
+}
+
+path.join('/')
+// Electronics/Cell_Phones_and_Accessories/Cell_Phones_and_Smartphones
+</pre>
+
+
+##Indexes
+Recommended index is putting index on left and right values:
+<pre>
+  db.categoriesAAO.ensureIndex( { left: 1, right:1 } )
+</pre>
+
+#Tree structure using combination of Nested Sets and classic Parent reference with order approach
+
+For each node we store (ID, Parent, Order,left, right).
+Left field also is treated as an order field, so we could omit order field. But from other hand
+we can leave it, so we can use Parent Reference with order data to reconstruct left/right values in case of accidental corruption, or, for example during initial import.
+
 
 
 #Code in action
