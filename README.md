@@ -368,31 +368,125 @@ Recommended index is putting index on path
 For each node we store (ID, left, right).
 Left field also can be treated as an order field
 
-![](http://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/NestedSets_small.png)
+![](https://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/NestedSets_small.png)
 
 ### Adding new node
+  Please refer to image above. Assume, we want to insert LG node after shop_top_products(14,23).
+New node would have left value of 24, affecting all remaining left values according to traversal rules, and will have right value of 25, affecting all remaining right values including root one.
+
+Steps:
+
+- take next node in traversal tree
+- new node will have left value of the following sibling and right value - incremented by two following sibling's left one
+- now we have to create the place for the new node. Update affects right values of all ancestor nodes and also affects all nodes that remain for traversal
+- Only after creating place new node can be inserted
 
 <pre>
-//todo
+var followingsibling = db.categoriesNSO.findOne({_id:"Cell_Phones_and_Accessories"});
+
+var newnode = {_id:'LG', left:followingsibling.left,right:followingsibling.left+1}
+
+db.categoriesNSO.update({right:{$gt:followingsibling.right}},{$inc:{right:2}}, false, true)
+
+db.categoriesNSO.update({left:{$gte:followingsibling.left}, right:{$lte:followingsibling.right}},{$inc:{left:2, right:2}}, false, true)
+
+db.categoriesNSO.insert(newnode)
 </pre>
 
-### Updating/moving the node
-
-moving the node
+Let's check the result:
 <pre>
-//todo
+ +-Electronics (1,46)
+     +---Cameras_and_Photography (2,13)
+           +------Digital_Cameras (3,4)
+           +------Camcorders (5,6)
+           +------Lenses_and_Filters (7,8)
+           +------Tripods_and_supports (9,10)
+           +------Lighting_and_studio (11,12)
+       +----Shop_Top_Products (14,23)
+           +------IPad (15,16)
+           +------IPhone (17,18)
+           +------IPod (19,20)
+           +------Blackberry (21,22)
+       +----LG (24,25)
+       +----Cell_Phones_and_Accessories (26,45)
+           +------Cell_Phones_and_Smartphones (27,38)
+                 +---------Nokia (28,29)
+                 +---------Samsung (30,31)
+                 +---------Apple (32,33)
+                 +---------HTC (34,35)
+                 +---------Vyacheslav (36,37)
+             +-------Headsets (39,40)
+             +-------Batteries (41,42)
+             +-------Cables_And_Adapters (43,44)
 </pre>
 
 ### Node removal
+While potentially rearranging node order within same parent is identical to exchanging node's left and right values,
+the formal way of moving the node is first removing node from the tree and later inserting it to new location.
+Node: node removal without removing it's childs is out of scope for this article. For now, we assume, that 
+node to remove has no children, i.e. right-left=1
+
+Steps are identical to adding the node - i.e. we adjusting the space by decreasing affected left/right values,
+and removing original node.
+<pre>
+var nodetoremove = db.categoriesNSO.findOne({_id:"LG"});
+
+if((nodetoremove.right-nodetoremove.left-1)>0.001) {
+    print("Only node without childs can be removed")
+    exit
+}
+
+var followingsibling = db.categoriesNSO.findOne({_id:"Cell_Phones_and_Accessories"});
+
+//update all remaining nodes
+db.categoriesNSO.update({right:{$gt:nodetoremove.right}},{$inc:{right:-2}}, false, true)
+db.categoriesNSO.update({left:{$gt:nodetoremove.right}},{$inc:{left:-2}}, false, true)
+db.categoriesNSO.remove({_id:"LG"});
+</pre>
+
+Let's check result:
+<pre>
+ +-Electronics (1,44)
+   +--Cameras_and_Photography (2,13)
+         +-----Digital_Cameras (3,4)
+         +-----Camcorders (5,6)
+         +-----Lenses_and_Filters (7,8)
+         +-----Tripods_and_supports (9,10)
+         +-----Lighting_and_studio (11,12)
+     +---Shop_Top_Products (14,23)
+         +-----IPad (15,16)
+         +-----IPhone (17,18)
+         +-----IPod (19,20)
+         +-----Blackberry (21,22)
+     +---Cell_Phones_and_Accessories (24,43)
+         +-----Cell_Phones_and_Smartphones (25,36)
+               +--------Nokia (26,27)
+               +--------Samsung (28,29)
+               +--------Apple (30,31)
+               +--------HTC (32,33)
+               +--------Vyacheslav (34,35)
+           +------Headsets (37,38)
+           +------Batteries (39,40)
+           +------Cables_And_Adapters (41,42)</pre>
+
+
+### Updating/moving the single node
+
+moving the node can be within same parent, or to another parent. If the same parent, and nodes are without childs, than you need just to exchange nodes (left,right) pairs.
+
+Formal way is to remove node and insert to new destination, thus the same restriction apply - only node without children can be moved.
+If you need to move subtree, consider creating mirror of the existing parent under new location, and move nodes under the new parent one by one. Once all nodes moved, remove obsolete old parent.
+
+As an example, lets move LG node from the insertion example under the Cell_Phones_and_Smartphones node, as a last sibling (i.e. you do not have following sibling node as in the insertion example)
+
 <pre>
 //todo
 </pre>
 
+
 ### Getting node children, unordered
-Note unless you introduce the order field, it is impossible to get ordered list of node children. You should consider another approach if you need order.
-<pre>
-//todo
-</pre>
+Note, unless all node childs have no childrens theirselfs it is impossible to get node direct childs.
+Consider using modified approach of combining NestedSets with parent field.
 
 
 ### Getting all node descendants
