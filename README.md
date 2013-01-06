@@ -590,7 +590,79 @@ For each node we store (ID, Parent, Order,left, right).
 Left field also is treated as an order field, so we could omit order field. But from other hand
 we can leave it, so we can use Parent Reference with order data to reconstruct left/right values in case of accidental corruption, or, for example during initial import.
 
+### Adding new node
+Adding new node can be adopted from Nested Sets in this manner:
+<pre>
+var followingsibling = db.categoriesNSO.findOne({_id:"Cell_Phones_and_Accessories"});
+var previoussignling = db.categoriesNSO.findOne({_id:"Shop_Top_Products"});
+var neworder = parseInt((followingsibling.order + previoussignling.order)/2);
+var newnode = {_id:'LG', left:followingsibling.left,right:followingsibling.left+1, parent:followingsibling.parent, order:neworder};
+db.categoriesNSO.update({right:{$gt:followingsibling.right}},{$inc:{right:2}}, false, true)
+db.categoriesNSO.update({left:{$gte:followingsibling.left}, right:{$lte:followingsibling.right}},{$inc:{left:2, right:2}}, false, true)
 
+db.categoriesNSO.insert(newnode)
+</pre>
+
+Before insertion
+<pre>
+          +----Cameras_and_Photography (2,13)  ord.[10]
+          +-----Shop_Top_Products (14,23)  ord.[20]
+          +-----Cell_Phones_and_Accessories (26,45)  ord.[30]
+</pre>
+
+After insertion:
+<pre>
+   +--Electronics (1,46) 
+           +----Cameras_and_Photography (2,13)  ord.[10]
+                       +-------Digital_Cameras (3,4)  ord.[10]
+                       +-------Camcorders (5,6)  ord.[20]
+                       +-------Lenses_and_Filters (7,8)  ord.[30]
+                       +-------Tripods_and_supports (9,10)  ord.[40]
+                       +-------Lighting_and_studio (11,12)  ord.[50]
+           +-----Shop_Top_Products (14,23)  ord.[20]
+                       +-------IPad (15,16)  ord.[10]
+                       +-------IPhone (17,18)  ord.[20]
+                       +-------IPod (19,20)  ord.[30]
+                       +-------Blackberry (21,22)  ord.[40]
+           +-----LG (24,25)  ord.[25]
+           +-----Cell_Phones_and_Accessories (26,45)  ord.[30]
+                       +-------Cell_Phones_and_Smartphones (27,38)  ord.[10]
+                                   +----------Nokia (28,29)  ord.[10]
+                                   +----------Samsung (30,31)  ord.[20]
+                                   +----------Apple (32,33)  ord.[30]
+                                   +----------HTC (34,35)  ord.[40]
+                                   +----------Vyacheslav (36,37)  ord.[50]
+                       +--------Headsets (39,40)  ord.[20]
+                       +--------Batteries (41,42)  ord.[30]
+                       +--------Cables_And_Adapters (43,44)  ord.[40]
+</pre>
+
+### Updating/moving the single node
+  Identical to insertion approach
+
+### Node removal
+Approach from Nested Sets is used. 
+
+### Getting node children, ordered
+  Now is possible by using (Parent,Order) pair
+<pre>
+db.categoriesNSO.find({parent:"Electronics"}).sort({order:1});
+/*
+
+{ "_id" : "Cameras_and_Photography", "parent" : "Electronics", "order" : 10, "left" : 2, "right" : 13 }
+{ "_id" : "Shop_Top_Products", "parent" : "Electronics", "order" : 20, "left" : 14, "right" : 23 }
+{ "_id" : "LG", "left" : 24, "right" : 25, "parent" : "Electronics", "order" : 25 }
+{ "_id" : "Cell_Phones_and_Accessories", "parent" : "Electronics", "order" : 30, "left" : 26, "right" : 45 }
+
+*/
+</pre>
+
+
+### Getting all node descendants
+Approach from Nested Sets is used.
+
+### Getting path to node
+Approach from nested sets is used
 
 #Code in action
 
