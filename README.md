@@ -479,8 +479,49 @@ If you need to move subtree, consider creating mirror of the existing parent und
 
 As an example, lets move LG node from the insertion example under the Cell_Phones_and_Smartphones node, as a last sibling (i.e. you do not have following sibling node as in the insertion example)
 
+Step 1 would be to remove LG node from tree using node removal procedure described above
+Step2 is to take right value of the new parent.
+New node will have left value of the parent's right value and right value - incremented by one parent's right one
+Now we have to create the place for the new node: update affects right values of all nodes on a further traversal path
+
+
 <pre>
-//todo
+var newparent = db.categoriesNSO.findOne({_id:"Cell_Phones_and_Smartphones"});
+var nodetomove = {_id:'LG', left:newparent.right,right:newparent.right+1}
+
+
+//3th and 4th parameters: false stands for upsert=false and true stands for multi=true
+db.categoriesNSO.update({right:{$gte:newparent.right}},{$inc:{right:2}}, false, true)
+db.categoriesNSO.update({left:{$gte:newparent.right}},{$inc:{left:2}}, false, true)
+
+db.categoriesNSO.insert(nodetomove)
+</pre>
+
+Let's check result:
+<pre>
+ +-Electronics (1,46)
+   +--Cameras_and_Photography (2,13)
+         +-----Digital_Cameras (3,4)
+         +-----Camcorders (5,6)
+         +-----Lenses_and_Filters (7,8)
+         +-----Tripods_and_supports (9,10)
+         +-----Lighting_and_studio (11,12)
+     +---Shop_Top_Products (14,23)
+         +-----IPad (15,16)
+         +-----IPhone (17,18)
+         +-----IPod (19,20)
+         +-----Blackberry (21,22)
+     +---Cell_Phones_and_Accessories (24,45)
+         +-----Cell_Phones_and_Smartphones (25,38)
+                 +---------Nokia (26,27)
+                 +---------Samsung (28,29)
+                 +---------Apple (30,31)
+                 +---------HTC (32,33)
+                 +---------Vyacheslav (34,35)
+                 +---------LG (36,37)
+             +-------Headsets (39,40)
+             +-------Batteries (41,42)
+             +-------Cables_And_Adapters (43,44)
 </pre>
 
 
