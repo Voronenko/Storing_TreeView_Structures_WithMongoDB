@@ -5,8 +5,7 @@ Educational repository demonstrating approaches for storing tree structures with
 
 #Background
 In a real life almost any project deals with the tree structures. Different kinds of taxonomies, site structures etc
-require modelling of hierarhy relations. In this article I will illustrate using first three of five typical approaches of 
-operateting with hierarchy data on example of the MongoDB database. 
+require modelling of hierarhy relations. In this article I will illustrate using five typical approaches plus one combination of operating with hierarchy data on example of the MongoDB database. 
 Those approaches are:
 
 - Model Tree Structures with Child References
