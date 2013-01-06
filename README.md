@@ -129,6 +129,8 @@ db.categoriesPCO.ensureIndex( { parent: 1, order:1 } )
 #Tree structure with childs reference
 For each node we store (ID, ChildReferences). 
 
+![](https://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/ChildReference.jpg)
+
 Please note, that in this case we do not need order field, because Childs collection
 already provides this information. Most of languages respect the array order. If this is not in case for your language, you might consider
 additional coding to preserve order, however this will make things more complicated.
@@ -233,6 +235,7 @@ db.categoriesCRO.ensureIndex( { childs: 1 } )
 
 #Tree structure Model an Array of Ancestors
 For each node we store (ID, ParentReference, AncestorReferences)
+![](https://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/AncestorReference.jpg)
 
 ### Adding new node
 
@@ -294,6 +297,8 @@ descendants.join(",")
 
 #Tree structure using Materialized Path
 For each node we store (ID, PathToNode)
+
+![](https://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/PathReference.jpg)
 
 ### Adding new node
 
@@ -366,6 +371,9 @@ Recommended index is putting index on path
 
 #Tree structure using Nested Sets
 For each node we store (ID, left, right).
+
+![](https://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/NestedSetsReference.jpg)
+
 Left field also can be treated as an order field
 
 ![](https://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/NestedSets_small.png)
@@ -576,6 +584,9 @@ Recommended index is putting index on left and right values:
 #Tree structure using combination of Nested Sets and classic Parent reference with order approach
 
 For each node we store (ID, Parent, Order,left, right).
+
+![](https://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/NestedSetsReference_combined.jpg)
+
 Left field also is treated as an order field, so we could omit order field. But from other hand
 we can leave it, so we can use Parent Reference with order data to reconstruct left/right values in case of accidental corruption, or, for example during initial import.
 
