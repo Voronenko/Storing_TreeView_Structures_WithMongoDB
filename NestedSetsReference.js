@@ -1,0 +1,25 @@
+use TreeMongo;
+db.categoriesNSO.drop();
+db.categoriesNSO.insert({_id:"Electronics",parent:'', left:1, right:44});
+db.categoriesNSO.insert({_id:"Cameras_and_Photography",parent:"Electronics", order:10, left:2, right:13});
+db.categoriesNSO.insert({_id:"Digital_Cameras",parent:"Cameras_and_Photography", order:10, left:3, right:4});
+db.categoriesNSO.insert({_id:"Camcorders",parent:"Cameras_and_Photography", order:20, left:5, right:6});
+db.categoriesNSO.insert({_id:"Lenses_and_Filters",parent:"Cameras_and_Photography", order:30, left:7, right:8});
+db.categoriesNSO.insert({_id:"Tripods_and_supports",parent:"Cameras_and_Photography", order:40, left:9, right:10});
+db.categoriesNSO.insert({_id:"Lighting_and_studio",parent:"Cameras_and_Photography", order:50, left:11, right:12});
+db.categoriesNSO.insert({_id:"Shop_Top_Products",parent:"Electronics", order:20, left:14, right:23});
+db.categoriesNSO.insert({_id:"IPad",parent:"Shop_Top_Products", order:10, left:15, right:16});
+db.categoriesNSO.insert({_id:"IPhone",parent:"Shop_Top_Products", order:20, left: 17, right:18});
+db.categoriesNSO.insert({_id:"IPod",parent:"Shop_Top_Products", order:30, left:19, right:20});
+db.categoriesNSO.insert({_id:"Blackberry",parent:"Shop_Top_Products", order:40, left:21, right:22});
+db.categoriesNSO.insert({_id:"Cell_Phones_and_Accessories",parent:"Electronics", order:30, left:24, right:43});
+db.categoriesNSO.insert({_id:"Cell_Phones_and_Smartphones",parent:"Cell_Phones_and_Accessories", order:10, left:25, right:36});
+db.categoriesNSO.insert({_id:"Headsets",parent:"Cell_Phones_and_Accessories", order:20, left:37, right:38});
+db.categoriesNSO.insert({_id:"Batteries",parent:"Cell_Phones_and_Accessories", order:30, left:39, right:40});
+db.categoriesNSO.insert({_id:"Cables_And_Adapters",parent:"Cell_Phones_and_Accessories", order:40, left:41, right:42});
+db.categoriesNSO.insert({_id:"Nokia",parent:"Cell_Phones_and_Smartphones", order:10, left:26, right:27});
+db.categoriesNSO.insert({_id:"Samsung",parent:"Cell_Phones_and_Smartphones", order:20, left:28, right:29});
+db.categoriesNSO.insert({_id:"Apple",parent:"Cell_Phones_and_Smartphones", order:30, left:30, right:31});
+db.categoriesNSO.insert({_id:"HTC",parent:"Cell_Phones_and_Smartphones", order:40, left:32, right:33});
+db.categoriesNSO.insert({_id:"Vyacheslav",parent:"Cell_Phones_and_Smartphones", order:50, left:34, right:35});
+
