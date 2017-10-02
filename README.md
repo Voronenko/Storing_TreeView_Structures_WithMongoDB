@@ -3,7 +3,7 @@ Storing Tree like Structures With MongoDB
 
 Educational repository demonstrating approaches for storing tree structures with NoSQL database MongoDB
 
-#Background
+# Background
 In a real life almost any project deals with the tree structures. Different kinds of taxonomies, site structures etc
 require modelling of hierarhy relations. In this article I will illustrate using five typical approaches plus one combination of operating with hierarchy data on example of the MongoDB database. 
 Those approaches are:
@@ -40,7 +40,7 @@ On each of the examples below we:
 Please refer to image above for visual representation.
 
 
-#Tree structure with parent reference
+# Tree structure with parent reference
 This is most commonly used approach. For each node we store (ID, ParentReference, Order).
 ![](https://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/ParentReference.jpg)
 ## Operating with tree
@@ -125,7 +125,7 @@ db.categoriesPCO.ensureIndex( { parent: 1, order:1 } )
 </pre>
 
 
-#Tree structure with childs reference
+# Tree structure with childs reference
 For each node we store (ID, ChildReferences). 
 
 ![](https://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/ChildReference.jpg)
@@ -232,7 +232,7 @@ Recommended index is putting index on childs:
 db.categoriesCRO.ensureIndex( { childs: 1 } )
 </pre>
 
-#Tree structure Model an Array of Ancestors
+# Tree structure Model an Array of Ancestors
 For each node we store (ID, ParentReference, AncestorReferences)
 ![](https://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/AncestorReference.jpg)
 
@@ -294,7 +294,7 @@ descendants.join(",")
 //Vyacheslav,HTC,Samsung,Cables_And_Adapters,Batteries,Headsets,Apple,Nokia,Cell_Phones_and_Smartphones
 </pre>
 
-#Tree structure using Materialized Path
+# Tree structure using Materialized Path
 For each node we store (ID, PathToNode)
 
 ![](https://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/PathReference.jpg)
@@ -361,14 +361,14 @@ print (item.path)
 </pre>
 
 
-##Indexes
+## Indexes
 Recommended index is putting index on path
 <pre>
   db.categoriesAAO.ensureIndex( { path: 1 } )
 </pre>
 
 
-#Tree structure using Nested Sets
+# Tree structure using Nested Sets
 For each node we store (ID, left, right).
 
 ![](https://raw.github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB/master/images/NestedSetsReference.jpg)
@@ -574,13 +574,13 @@ path.join('/')
 </pre>
 
 
-##Indexes
+## Indexes
 Recommended index is putting index on left and right values:
 <pre>
   db.categoriesAAO.ensureIndex( { left: 1, right:1 } )
 </pre>
 
-#Tree structure using combination of Nested Sets and classic Parent reference with order approach
+# Tree structure using combination of Nested Sets and classic Parent reference with order approach
 
 For each node we store (ID, Parent, Order,left, right).
 
@@ -663,7 +663,7 @@ Approach from Nested Sets is used.
 ### Getting path to node
 Approach from nested sets is used
 
-#Code in action
+# Code in action
 
 Code can be downloaded from repository [https://github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB](https://github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB "https://github.com/Voronenko/Storing_TreeView_Structures_WithMongoDB")
 
@@ -675,7 +675,7 @@ All files are packaged according to the following naming convention:
 - MODELReference_nodedescendants.js - code illustrating how to retrieve all the descendands of the node
 
 
-#Points of interest
+# Points of interest
   Please note, that MongoDB does not provide ACID transactions. This means, that for update operations splitted
 into separate update commands, your application should implement additional code to support your code specific transactions.
 
